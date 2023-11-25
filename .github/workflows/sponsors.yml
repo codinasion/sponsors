@@ -1,0 +1,39 @@
+name: Generate sponsors image
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 0 * * *"
+  push:
+    branches: [master]
+
+jobs:
+  update-sponsors:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Update sponsors
+        run: yarn build
+        env:
+          SPONSORKIT_GITHUB_TOKEN: ${{ secrets.SPONSORKIT_GITHUB_TOKEN }}
+          SPONSORKIT_GITHUB_LOGIN: ${{ secrets.SPONSORKIT_GITHUB_LOGIN }}
+          SPONSORKIT_PATREON_TOKEN: ${{ secrets.SPONSORKIT_PATREON_TOKEN }}
+          SPONSORKIT_OPENCOLLECTIVE_KEY: ${{ secrets.SPONSORKIT_OPENCOLLECTIVE_KEY }}
+          SPONSORKIT_OPENCOLLECTIVE_SLUG: ${{ secrets.SPONSORKIT_OPENCOLLECTIVE_SLUG }}
+          SPONSORKIT_OPENCOLLECTIVE_TYPE: ${{ secrets.SPONSORKIT_OPENCOLLECTIVE_TYPE }}
+
+      - name: Commit and push changes
+        uses: crazy-max/ghaction-github-pages@v3.0.0
+        with:
+          target_branch: sponsors
+          build_dir: sponsorkit
+          keep_history: false
+          committer: Harsh Raj <harshraj8843@users.noreply.github.com>
+          author: Harsh Raj <harshraj8843@users.noreply.github.com>
+          commit_message: Update sponsors
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
