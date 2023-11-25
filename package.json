@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md,mdx,json,yml,yaml}\"",
+    "build": "sh build.sh",
+    "all": "yarn format && yarn build"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.3",
+    "sponsorkit": "^0.8.9"
+  }
+}
